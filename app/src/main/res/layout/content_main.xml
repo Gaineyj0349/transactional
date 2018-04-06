@@ -9,6 +9,7 @@
     tools:showIn="@layout/activity_main"
     android:orientation="vertical">
 
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
@@ -24,20 +25,15 @@
 
 
         <android.support.design.widget.TabItem
-            android:text="Transactions"
+            android:text="Transaction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <android.support.design.widget.TabItem
-            android:text="Purchase"
+            android:text="History"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-
-        <android.support.design.widget.TabItem
-            android:text="Deposit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
         <android.support.design.widget.TabItem
             android:text="Statistics"
