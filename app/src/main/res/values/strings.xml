@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">Transactional</string>
     <string name="action_settings">Settings</string>
-    <string name="balance"><u>BALANCE:</u></string>
+    <string name="select"><u>SELECT</u></string>
+    <string name="create"><u>CREATE</u></string>
+    <string name="balance"><u>BALANCE</u></string>
+    <string name="fragpurchasemain"><u>Main Label:</u></string>
+    <string name="fragpurchasesub"><u>Sub Label:</u></string>
+    <string name="fragpurchasecrossref"><u>Cross Reference:</u></string>
+    <string name="fragpurchaseadditionalinfo"><u>Additional Information:</u></string>
 </resources>

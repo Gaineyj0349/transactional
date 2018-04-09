@@ -11,4 +11,7 @@
     <color name="negativeCard">#ffe082</color>
     <color name="positiveMoney">#43a047</color>
     <color name="negativeMoney">#e53935</color>
+    <color name="fragCardRV">#311b92</color>
+    <color name="fragCardTransOptions">#c5e1a5</color>
+    <color name="fragAccountBanner">#ffecb3</color>
 </resources>
