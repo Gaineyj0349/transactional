@@ -11,6 +11,7 @@
     <string name="fragpurchaseadditionalinfo"><u>Additional Information:</u></string>
     <string name="fragpurchasefromcash"><u>Cash Purchase:</u></string>
     <string name="title_activity_settings">Settings</string>
+    <string name="expense">Expense Tracker</string>
 
     <!-- Strings related to Settings -->
 
