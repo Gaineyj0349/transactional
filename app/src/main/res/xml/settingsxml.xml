@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditTextPreference
+        android:defaultValue="$"
+        android:inputType="text"
+        android:key="currency_symbol_key"
+        android:singleLine="true"
+        android:title="Currency Symbol:"
+        />
+
+    <ListPreference
+        android:defaultValue="@string/expense"
+        android:entries="@array/pref_mode_options"
+        android:entryValues="@array/pref_mode_values"
+        android:key="mode_key"
+        android:title="App Mode:"
+        android:summary="@string/expense"
+        />
+
+
+    <EditTextPreference
+        android:defaultValue="Main Checking"
+        android:inputType="text"
+        android:key="account_name_key"
+        android:singleLine="true"
+        android:title="Main Account Name:"
+        />
+
+</PreferenceScreen>

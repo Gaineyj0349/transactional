@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingTop="3dp"
+    android:paddingBottom="3dp"
+
+    >
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        >
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/card_mainBG"
+        android:padding="6dp"
+
+        android:background="@color/positiveCard">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp">
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6dp">
+
+    <TextView
+
+        android:id="@+id/card_main_label"
+        android:textSize="14sp"
+        android:text="FOOD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/card_date"/>
+    <TextView
+        android:id="@+id/card_sub_label"
+        android:textSize="12sp"
+        android:text="Micasita"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/card_main_label"/>
+
+    <TextView
+        android:id="@+id/card_date"
+        android:textSize="14sp"
+        android:textColor="#5c6bc0"
+        android:text="11/17/2018"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"/>
+
+
+    <TextView
+        android:id="@+id/card_remaining_balance"
+        android:textSize="22sp"
+        android:text="$ 611.65"
+        android:textColor="@color/colorPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        />
+
+        <TextView
+            android:id="@+id/card_balancetvstatic"
+            android:textSize="14sp"
+            android:text="@string/balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+         android:layout_alignBottom="@+id/card_sub_label"
+
+            />
+<!--
+        <TextView
+            android:id="@+id/card_amount"
+            android:textSize="22sp"
+            android:textColor="@color/negativeMoney"
+            android:text="$44.25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/card_sub_label"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"/>
+
+    <ImageView
+        android:src="@drawable/ic_info_black_24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/card_info_imageview"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"/>
+
+-->
+
+        <TextView
+            android:id="@+id/card_amount"
+            android:textSize="22sp"
+            android:textColor="@color/negativeMoney"
+            android:text="$44.25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"/>
+
+        <ImageView
+            android:layout_below="@id/card_sub_label"
+            android:src="@drawable/ic_info_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/card_info_imageview"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+    </android.support.v7.widget.CardView>
+    </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

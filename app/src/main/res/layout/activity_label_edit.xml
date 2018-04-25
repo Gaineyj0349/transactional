@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.LabelEdit"
+    android:padding="8dp"
+    >
+
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_above="@id/rl2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.asksira.dropdownview.DropDownView
+        android:id="@+id/dropdownview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:placeholder_text="Please select"
+        app:filter_bar_background_color="@color/colorPrimaryDark"
+        app:filter_text_color="@android:color/white"
+        app:arrow_drawable="@drawable/expand_arrow"
+        app:arrow_width="24dp"
+        app:dropDownItem_text_color_selected="@color/colorAccent"
+        app:divider_color="@color/colorPrimary"
+        app:dropDownItem_text_size_selected="18sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/rl2"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       >
+
+
+    <Button
+        android:id="@+id/label_edit_edit_button"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="EDIT CURRENT SELECTION" />
+
+    <Button
+        android:id="@+id/label_edit_delete_button"
+        style="@android:style/Widget.Material.Light.Button.Inset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="DELETE CURRENT SELECTION" />
+
+    <Button
+        android:id="@+id/label_edit_add_button"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="ADD NEW LABEL" />
+
+    </LinearLayout>
+
+</RelativeLayout>

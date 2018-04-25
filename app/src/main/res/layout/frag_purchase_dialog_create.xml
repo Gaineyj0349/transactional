@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+
+    <TextView
+        android:layout_alignParentTop="true"
+        android:id="@+id/frag_purchase_dialog_create_tv"
+        android:textSize="25sp"
+        android:layout_width="match_parent"
+       android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:text="@string/create"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_below="@id/frag_purchase_dialog_create_tv"
+        android:id="@+id/etbigcuz"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/fab_margin"
+        android:paddingRight="6dp">
+
+        <android.support.design.widget.TextInputEditText
+
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/frag_purchase_dialog_create_et"
+            android:hint="New Label"
+            android:focusable="true"/>
+
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+       android:padding="8dp"
+        android:layout_centerInParent="true"
+        android:text="Customize Label Color"
+        android:id="@+id/frag_purchase_dialog_color_button"
+        style="@android:style/Widget.Button.Inset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etbigcuz" />
+
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/frag_purchase_dialog_color_button"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <Button
+
+        android:id="@+id/frag_purchase_dialog_cancel_button"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel" />
+    <Button
+        android:id="@+id/frag_purchase_dialog_create_button"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create" />
+    </LinearLayout>
+
+</RelativeLayout>
