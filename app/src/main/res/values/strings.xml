@@ -1,15 +1,20 @@
 <resources>
-    <string name="app_name">Transactional</string>
+    <string name="app_name">TransActive</string>
     <string name="action_settings">Settings</string>
     <string name="select"><u>SELECT</u></string>
     <string name="create"><u>CREATE</u></string>
+    <string name="apache"><u>APACHE 2.0</u></string>
+    <string name="mit"><u>MIT</u></string>
     <string name="additionalInfo"><u>ADDITIONAL INFO</u></string>
     <string name="balance"><u>RESULTING BALANCE</u></string>
     <string name="fragpurchasemain"><u>Main Label:</u></string>
     <string name="fragpurchasesub"><u>Sub Label:</u></string>
     <string name="fragpurchasecrossref"><u>Cross Reference:</u></string>
     <string name="fragpurchaseadditionalinfo"><u>Additional Information:</u></string>
-    <string name="fragpurchasefromcash"><u>Cash Purchase:</u></string>
+    <string name="fragpurchasefromcash"><u>From Cash or Other Account:</u></string>
+    <string name="amount"><u>Amount:</u></string>
+    <string name="confirmamount"><u>Confirm Amount/Type</u></string>
+    <string name="date"><u>Date:</u></string>
     <string name="title_activity_settings">Settings</string>
     <string name="expense">Expense Tracker</string>
 

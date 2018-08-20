@@ -26,9 +26,25 @@
             android:parentActivityName=".Activities.MainActivity" />
         <activity
             android:name=".Activities.LabelEdit"
+            android:launchMode="singleTop"
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.TransactionView"></activity>
+        <activity
+            android:name=".Activities.TransactionView"
+            android:launchMode="singleTop"
+            android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activities.Credits" />
+        <activity android:name=".Activities.javatest" />
+        <activity
+            android:name=".Activities.EntireHistoryWFilter"
+            android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".Activities.LabelSummaryAct"
+            android:parentActivityName=".Activities.MainActivity"
+            android:launchMode="singleTop"
+            ></activity>
     </application>
 
 </manifest>

@@ -1,10 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="2dp">
 
-    <TextView
+
+    <TableLayout
+        android:layout_above="@+id/frag_stat_ll"
+        android:id="@+id/frag_stat_checkbox_tl1"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="STATISTICS"/>
-</LinearLayout>
+        android:shrinkColumns="*"
+        android:stretchColumns="*">
+
+    <TableRow
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="left">
+
+    <CheckBox
+        android:id="@+id/frag_stat_checkbox_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Entire History" />
+
+    </TableRow>
+
+
+
+        <TableRow
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="left">
+
+
+            <CheckBox
+
+                android:id="@+id/frag_stat_checkbox_custom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Custom Date Range" />
+
+
+        </TableRow>
+
+        <TableRow
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal">
+
+
+      <TextView
+          android:text="Start date"
+          android:id="@+id/txtStartDay"
+          android:layout_height="wrap_content"
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:textAlignment="center"/>
+
+            <TextView
+                android:text="End Date"
+                android:id="@+id/txtEndDay"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textAlignment="center"/>
+
+
+        </TableRow>
+
+
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal">
+            <pyxis.uzuki.live.sectioncalendarview.SectionCalendarView
+
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/calendarView" />
+
+        </TableRow>
+
+    </TableLayout>
+    <LinearLayout
+        android:id="@+id/frag_stat_ll"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        >
+
+
+        <Button
+            android:id="@+id/frag_stat_clear"
+            style="@android:style/Widget.Material.Light.Button.Inset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="RESET DATE"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/frag_stat_go"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="GO"
+            android:textAlignment="center" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

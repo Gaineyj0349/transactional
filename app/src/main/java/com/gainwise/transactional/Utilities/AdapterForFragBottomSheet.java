@@ -1,5 +1,6 @@
 package com.gainwise.transactional.Utilities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gainwise.transactional.Activities.MainActivity;
+import com.gainwise.transactional.Activities.TransactionView;
 import com.gainwise.transactional.Fragments.FragPurchase;
 import com.gainwise.transactional.POJO.Transaction;
 import com.gainwise.transactional.R;
@@ -22,12 +25,16 @@ public class AdapterForFragBottomSheet extends RecyclerView.Adapter<AdapterForFr
     Context context;
     List<Transaction> list;
     String type;
+    String source;
+    String idToChange;
 
-    public AdapterForFragBottomSheet(Context context, List<Transaction> list,String type) {
+    public AdapterForFragBottomSheet(Context context, List<Transaction> list,String type, String source, String idToChange) {
         Log.i("JOSH", "type is "+ type);
         this.context = context;
         this.list = list;
         this.type = type;
+        this.source = source;
+        this.idToChange = idToChange;
     }
 
     @NonNull
@@ -41,6 +48,8 @@ public class AdapterForFragBottomSheet extends RecyclerView.Adapter<AdapterForFr
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Log.i("JOSH", ""+list.size());
         Log.i("JOSH", "HELPER");
+
+        holder.colortv.setText(list.get(position).getColor1());
 
         if(type.equals("main")) {
             if (list.get(position).getMainLabel() != null && list.get(position).getMainLabel().length() > 0 && list != null) {
@@ -84,10 +93,11 @@ public class AdapterForFragBottomSheet extends RecyclerView.Adapter<AdapterForFr
 
         public TextView mtextView;
         public LinearLayout ll;
+        public TextView colortv;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-
+            colortv = (TextView) itemView.findViewById(R.id.frag_purchase_bottom_sheet_card_tv_color);
              mtextView = (TextView) itemView.findViewById(R.id.frag_purchase_bottom_sheet_card_tv);
              ll = (LinearLayout) itemView.findViewById(R.id.frag_purchase_bottom_sheet_ll);
              itemView.setOnClickListener(new View.OnClickListener() {
@@ -95,10 +105,48 @@ public class AdapterForFragBottomSheet extends RecyclerView.Adapter<AdapterForFr
                  public void onClick(View v) {
                      Log.i("JOSH", "Clicked  type is "+ type);
                      if(type.equals("main")){
-                         FragPurchase.resetSubLabel();
-                         FragPurchase.secureMainLabelInfo(mtextView.getText().toString());
+                        switch (source){
+                            case "transview":
+                                MainActivity.db.TransactionDAO().updateTransactionMainLabelWithID(Integer.parseInt(idToChange),mtextView.getText().toString());
+                                MainActivity.db.TransactionDAO().updateTransactionColorWithID(Integer.parseInt(idToChange),colortv.getText().toString());
+                                MainActivity.db.TransactionDAO().updateTransactionSubLabelWithID(Integer.parseInt(idToChange),null);
+                                ((Activity)context).recreate();
+                                if(context instanceof TransactionView){
+                                    ((TransactionView)context).closeDialogs();
+                                }
+
+
+                                break;
+
+                            case "fragpurchase":
+                                FragPurchase.resetSubLabel();
+                                FragPurchase.secureMainLabelInfo(mtextView.getText().toString());
+                                break;
+
+                                default:
+                                    break;
+
+                        }
                      }else if(type.equals("sub")){
-                         FragPurchase.secureSubLabelInfo(mtextView.getText().toString());
+                         switch (source){
+                             case "transview":
+                                 MainActivity.db.TransactionDAO().updateTransactionSubLabelWithID(Integer.parseInt(idToChange),mtextView.getText().toString());
+                                 if(context instanceof TransactionView){
+                                     ((TransactionView)context).closeDialogs();
+                                 }
+                                 ((Activity)context).recreate();
+
+                                 break;
+
+                             case "fragpurchase":
+                                 FragPurchase.secureSubLabelInfo(mtextView.getText().toString());
+
+                                 break;
+
+                             default:
+                                 break;
+
+                         }
                      }
                  }
              });

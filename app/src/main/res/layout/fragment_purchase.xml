@@ -78,9 +78,9 @@
         android:layout_height="wrap_content"
         app:ss_animationDuration="900"
         app:ss_iconSize="15dp"
-        app:ss_leftIcon="@drawable/ic_money_off_black_24dp"
+        app:ss_leftIcon="@drawable/ic_remove_black_24dp"
         app:ss_leftText="Withdrawal"
-        app:ss_rightIcon="@drawable/ic_attach_money_black_24dp"
+        app:ss_rightIcon="@drawable/ic_add_black_24dp"
         app:ss_rightText="Deposit"
         app:ss_selectedTextSize="10sp"
         app:ss_sliderBackgroundColor="@color/colorPrimaryDark"
@@ -376,6 +376,15 @@
                     android:id="@+id/frag_purchase_from_cash"
                     android:focusable="true"/>
             </LinearLayout>
+            <ImageView
+             android:layout_toLeftOf="@id/frag_purchase_checkbox"
+                android:padding="6dp"
+
+                android:id="@+id/frag_purchase_iv_infocash"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_info_black_24dp"
+                android:tint="#000000"/>
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:layout_alignParentEnd="true"

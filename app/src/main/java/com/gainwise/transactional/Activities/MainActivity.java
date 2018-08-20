@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,16 +14,24 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.gainwise.transactional.Fragments.SettingsFragment;
 import com.gainwise.transactional.R;
+import com.gainwise.transactional.RoomFiles.MyRoomDatabase;
 import com.gainwise.transactional.Utilities.AdapterViewPager;
+
+import osmandroid.project_basics.Task;
+import spencerstudios.com.bungeelib.Bungee;
+import spencerstudios.com.fab_toast.FabToast;
 
 public class MainActivity extends AppCompatActivity {
 
     public static com.gainwise.transactional.RoomFiles.MyRoomDatabase db;
     public static ViewPager viewPager;
    public static SharedPreferences prefs;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
 //TODO remove the maintrhreadallowance
          db = Room.databaseBuilder(getApplicationContext(),
                 com.gainwise.transactional.RoomFiles.MyRoomDatabase.class, "_database_transaction_master")
-                 .fallbackToDestructiveMigration()
+                // .fallbackToDestructiveMigration()
+                 .addMigrations(MyRoomDatabase.MIGRATION_2_3)
                  .allowMainThreadQueries().build();
          prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -74,10 +84,29 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
         startActivity(new Intent(this, SettingsActivity.class));
+            Bungee.card(this);
+
+            return true;
+        }
+        if (id == R.id.rate) {
+        Task.RateApp(this,"com.gainwise.transactional");
+
+            return true;
+        }
+        if (id == R.id.share) {
+            Task.ShareApp(this,"com.gainwise.transactional", "TransActive", "Easily track your purchases and deposites, find out where your money is going!");
 
 
             return true;
         }
+        if (id == R.id.license) {
+            startActivity(new Intent(this, javatest.class));
+            Bungee.slideUp(this);
+
+            return true;
+        }
+
+
 
 
         return super.onOptionsItemSelected(item);
@@ -107,4 +136,46 @@ public class MainActivity extends AppCompatActivity {
         return color;
     }
 
+
+    public static String getIncludeStatStatus(String main){
+        return db.TransactionDAO().getIncludeStatStatus(main);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("JOSHspawn", "onDestroy");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i("JOSHspawn", "onStop");
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        Log.i("JOSHspawn", "MemoryLow");
+    }
+
+    boolean double_backpressed = false;
+    @Override
+    public void onBackPressed(){
+        if(double_backpressed) {
+            super.onBackPressed();
+            return;
+        }
+        this.double_backpressed=true;
+        FabToast.makeText(MainActivity.this,
+                "Click back again to exit.",Toast.LENGTH_SHORT,FabToast.INFORMATION,FabToast.POSITION_DEFAULT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                double_backpressed = false;
+            }
+        },2000);
+
+    }
 }

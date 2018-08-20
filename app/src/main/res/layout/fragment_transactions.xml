@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="4dp"
     android:paddingRight="8dp"
     android:paddingLeft="8dp">
    <TextView
+       android:layout_alignParentTop="true"
        android:paddingBottom="3dp"
        android:textAlignment="center"
        android:background="@color/fragAccountBanner"
@@ -15,9 +16,21 @@
        android:layout_height="wrap_content" />
 
    <android.support.v7.widget.RecyclerView
+
+       android:layout_below="@id/frag_trans_button"
        android:paddingTop="3dp"
        android:id="@+id/frag_trans_recyclerview"
        android:layout_width="match_parent"
        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
-</LinearLayout>
+   <Button
+       android:layout_below="@+id/frag_trans_accountBanner"
+
+       android:id="@+id/frag_trans_button"
+       style="@style/Widget.AppCompat.Button.Colored"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+
+       android:text="GO TO FULL HISTORY\nWITH LABEL FILTERS" />
+
+</RelativeLayout>

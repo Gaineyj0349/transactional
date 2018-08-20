@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,7 +27,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +42,13 @@ import com.skydoves.colorpickerpreference.ColorEnvelope;
 import com.skydoves.colorpickerpreference.ColorListener;
 import com.skydoves.colorpickerpreference.ColorPickerView;
 
+import net.frederico.showtipsview.ShowTipsBuilder;
+import net.frederico.showtipsview.ShowTipsView;
+import net.frederico.showtipsview.ShowTipsViewInterface;
+
+import org.michaelbel.bottomsheet.BottomSheet;
+import org.michaelbel.bottomsheet.BottomSheetCallback;
+
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -45,7 +56,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import io.ghyeok.stickyswitch.widget.StickySwitch;
+import spencerstudios.com.bungeelib.Bungee;
+import spencerstudios.com.fab_toast.FabToast;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.gainwise.transactional.Activities.MainActivity.getCurrencySymbol;
 
 public class FragPurchase extends Fragment {
@@ -54,11 +68,15 @@ public class FragPurchase extends Fragment {
     static String color = null;
     View view = null;
     EditText etAmount;
+    Button saveButton;
+    public static boolean resetMain = false;
+    public static boolean resetSub = false;
     public static TextView tvMainLabel;
     public static TextView tvSubLabel;
     public static TextView tvcrossReferenceID;
     public static TextView tvAdditionalInfo;
     StickySwitch stickySwitch;
+    BottomSheet.Builder builder;
     InputMethodManager inputMethodManager;
     boolean duckKeyboard = false;
     CheckBox fromCashCheckBox;
@@ -76,7 +94,7 @@ public class FragPurchase extends Fragment {
     ImageView addSubLabelIV;
     ImageView pickSubLabelIV;
     ImageView addAdditionalInfoIV;
-    ImageView crossReferenceIDIV;
+    ImageView fromCashIV;
     CardView cashCard;
     TextView accountName;
     //TODO get mode pref to set this bool
@@ -92,13 +110,14 @@ public class FragPurchase extends Fragment {
 
             view = inflater.inflate(R.layout.fragment_purchase, container, false);
 
+
             accountName = (TextView) view.findViewById(R.id.frag_purchase_accountBanner);
             if (expenseTrackerOnly) {
 
             } else {
                 accountName.setText(buildBanner());
             }
-
+            fromCashIV =(ImageView)view.findViewById(R.id.frag_purchase_iv_infocash);
             tvAdditionalInfo = (TextView) view.findViewById(R.id.frag_purchase_additional_info_tv);
             etAmount = (EditText) view.findViewById(R.id.frag_purchase_amountET);
             tvMainLabel = (TextView) view.findViewById(R.id.frag_purchase_mainLabelTV);
@@ -106,6 +125,7 @@ public class FragPurchase extends Fragment {
             cashCard = (CardView) view.findViewById(R.id.frag_purchase_cash_card);
             //        tvcrossReferenceID = (TextView) view.findViewById(R.id.frag_purchase_cross_ref_TV);
             stickySwitch = (StickySwitch) view.findViewById(R.id.frag_purchase_sticky_switch);
+
             textInputLayout = (TextInputLayout) view.findViewById(R.id.textInputLayout);
             textInputLayout.setHint(getCurrencySymbol() + " AMOUNT");
             initKeyBoard();
@@ -120,6 +140,13 @@ public class FragPurchase extends Fragment {
             //       crossReferenceIDIV = (ImageView)view.findViewById(R.id.frag_purchase_iv_link);
             fromCashCheckBox = (CheckBox) view.findViewById(R.id.frag_purchase_checkbox);
 
+            fromCashIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+        initNewBuilder2();
+                }
+            });
+
             editMainLabelIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -129,9 +156,11 @@ public class FragPurchase extends Fragment {
                         Intent intent = new Intent(getActivity(), LabelEdit.class);
                         intent.putExtra("main1", mainLabelSelected);
                         startActivity(intent);
+                        Bungee.split(getActivity());
                     }else{
                         Intent intent = new Intent(getActivity(), LabelEdit.class);
                         startActivity(intent);
+                        Bungee.split(getActivity());
                     }
 
                     } /*else {
@@ -144,7 +173,8 @@ public class FragPurchase extends Fragment {
                 public void onClick(View v) {
 
                     if (mainLabelSelected == null) {
-                        Toast.makeText(getActivity(), "You must select a Main Label to filter Sub Labels for edit mode.", Toast.LENGTH_SHORT).show();
+                        FabToast.makeText(getActivity(), "You must select a Main Label to filter Sub Labels for edit mode.", Toast.LENGTH_SHORT,
+                                FabToast.INFORMATION, FabToast.POSITION_DEFAULT).show();
                     }
                     /*else if(MainActivity.db.TransactionDAO().fetchLatestSubWithMain(mainLabelSelected) == null){
                         Toast.makeText(getActivity(), "You must first create a new Sub Label!", Toast.LENGTH_SHORT).show();
@@ -154,6 +184,7 @@ public class FragPurchase extends Fragment {
                         Intent intent = new Intent(getActivity(), LabelEdit.class);
                         intent.putExtra("main", mainLabelSelected);
                         startActivity(intent);
+                        Bungee.split(getActivity());
                     }
                 }
             });
@@ -170,7 +201,8 @@ public class FragPurchase extends Fragment {
                     if (l.size() > 0) {
                         pickMainLabel();
                     } else {
-                        Toast.makeText(getActivity(), "You must create a Main Label first", Toast.LENGTH_SHORT).show();
+                        FabToast.makeText(getActivity(), "You must create a Main Label first", Toast.LENGTH_SHORT,
+                                FabToast.INFORMATION, FabToast.POSITION_DEFAULT).show();
                     }
                 }
             });
@@ -178,7 +210,8 @@ public class FragPurchase extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if (mainLabelSelected == null) {
-                        Toast.makeText(getActivity(), "You must select a Main Label before a Sub Label!", Toast.LENGTH_SHORT).show();
+                        FabToast.makeText(getActivity(), "You must select a Main Label before a Sub Label!",
+                                FabToast.INFORMATION, FabToast.POSITION_DEFAULT, Toast.LENGTH_SHORT).show();
                     } else {
                         addNewSubLabel();
                     }
@@ -190,9 +223,11 @@ public class FragPurchase extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if (mainLabelSelected == null) {
-                        Toast.makeText(getActivity(), "You must select a Main Label before a Sub Label!", Toast.LENGTH_SHORT).show();
+                        FabToast.makeText(getActivity(), "You must select a Main Label before a Sub Label!", FabToast.LENGTH_SHORT,
+                                FabToast.INFORMATION, FabToast.POSITION_DEFAULT).show();
                     }else if(MainActivity.db.TransactionDAO().fetchLatestSubWithMain(mainLabelSelected) == null){
-                        Toast.makeText(getActivity(), "You must first create a new Sub Label!", Toast.LENGTH_SHORT).show();
+                        FabToast.makeText(getActivity(), "You must first create a new Sub Label!", Toast.LENGTH_SHORT
+                        ,FabToast.INFORMATION, FabToast.POSITION_DEFAULT).show();
                         }
                     else {
                         Log.i("JOSH93",""+MainActivity.db.TransactionDAO().fetchAllTransactionStringOnlySubLabelsOnlyWithMainLabel(mainLabelSelected).size());
@@ -214,14 +249,15 @@ public class FragPurchase extends Fragment {
             });*/
 
 
-            Button saveButton = (Button) view.findViewById(R.id.frag_purchase_saveButton);
+             saveButton = (Button) view.findViewById(R.id.frag_purchase_saveButton);
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (etAmount.getText().length() > 0 && mainLabelSelected != null) {
                         showDialog();
                     } else {
-                        Toast.makeText(getActivity(), "You must at least have an amount and main label.", Toast.LENGTH_SHORT).show();
+                        FabToast.makeText(getActivity(), "You must at least have an amount and main label.", Toast.LENGTH_SHORT,
+                                FabToast.INFORMATION, FabToast.POSITION_DEFAULT).show();
 
                     }
 
@@ -235,10 +271,14 @@ public class FragPurchase extends Fragment {
                 }
             });
             updateModeViews();
+
+
         }
         return view;
 
     }
+
+
 
     public static String buildBanner() {
         if (MainActivity.db.TransactionDAO().getLastBalance() == null) {
@@ -278,11 +318,12 @@ public class FragPurchase extends Fragment {
 
         }
         builder.setTitle("Transaction Details:")
-                .setMessage(getStringOfDetails())
+                .setMessage(getStringOfDetails(purchase))
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), "Success", Toast.LENGTH_LONG).show();
+                        FabToast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT,
+                                FabToast.SUCCESS, FabToast.POSITION_DEFAULT).show();
                         savedClicked(purchase);
                     }
                 })
@@ -297,8 +338,9 @@ public class FragPurchase extends Fragment {
 
     }
 
-    private String getStringOfDetails() {
+    private String getStringOfDetails(boolean isPurchase) {
         StringBuilder sb = new StringBuilder();
+        String amount = etAmount.getText().toString().trim();
         if (stickySwitch.getDirection() == StickySwitch.Direction.LEFT) {
             sb.append("EXPENSE\n\n");
         } else {
@@ -306,8 +348,19 @@ public class FragPurchase extends Fragment {
         }
         sb.append("AMOUNT:");
         sb.append("\n");
-        sb.append(etAmount.getText().toString());
+        sb.append(getCurrencySymbol() + amount);
         sb.append("\n\n");
+        if(!MainActivity.expenseTrackerOnlyMode()){
+            sb.append("RESULTING BALANCE AFTER THIS TRANSACTION:");
+            sb.append("\n");
+            if (fromCashCheckBox.isChecked()) {
+                sb.append(getCurrencySymbol() + MainActivity.db.TransactionDAO().getLastBalance());
+            } else {
+                sb.append(getCurrencySymbol() +calculateLastBalance(isPurchase, amount));
+            }
+            sb.append("\n\n");
+        }
+
         sb.append("MAIN LABEL:");
         sb.append("\n");
         sb.append(tvMainLabel.getText().toString());
@@ -346,13 +399,19 @@ public class FragPurchase extends Fragment {
         if (subLabelSelected != null) {
             transaction.setSubLabel(subLabelSelected);
         }
-        if (crossReferenceID != null) {
-            transaction.setCrossReferenceID(crossReferenceID);
+        if (MainActivity.getIncludeStatStatus(mainLabelSelected).equals("0")) {
+            transaction.setCrossReferenceID("0");
+            }else{
+            transaction.setCrossReferenceID("1");
         }
+
         if (color != null) {
             transaction.setColor1(color);
         }
         Calendar cal = Calendar.getInstance();
+        transaction.setTimeInMillis(timeInMillis);
+        Log.i("JOSHtime", ""+timeInMillis);
+
         transaction.setDay(String.valueOf(cal.get(Calendar.DAY_OF_MONTH)));
         transaction.setDayOfWeek(getDayOfWeek(cal.get(Calendar.DAY_OF_WEEK)));
         transaction.setMonth(String.valueOf(cal.get(Calendar.MONTH) + 1));
@@ -367,9 +426,12 @@ public class FragPurchase extends Fragment {
         if (fromCashCheckBox.isChecked()) {
             transaction.setFromCash("yes");
             transaction.setCurrentBalance(MainActivity.db.TransactionDAO().getLastBalance());
-        } else {
+        } else if (!fromCashCheckBox.isChecked()&& !MainActivity.expenseTrackerOnlyMode()){
             transaction.setFromCash("no");
             transaction.setCurrentBalance(calculateLastBalance(isPurchase, amount));
+        }else{
+            transaction.setCurrentBalance("0");
+            transaction.setFromCash("no");
         }
 
         Log.i("JOSHcalc", "amount sent: " + amount);
@@ -464,15 +526,37 @@ public class FragPurchase extends Fragment {
         } else {
 
             //custom code here for when frag is visible
-            if(cameFromEditMode){
+   /*         if(cameFromEditMode){
                 cameFromEditMode = false;
-            clearClicked();}
+            clearClicked();}*/
             updateModeViews();
             textInputLayout.setHint(getCurrencySymbol() + " AMOUNT");
             if (expenseTrackerOnly) {
 
             } else {
                 accountName.setText(buildBanner());
+            }
+
+            SharedPreferences prefs = getActivity().getSharedPreferences("TRANS", MODE_PRIVATE);
+            String restoredText = prefs.getString("FragPurchase", "yes");
+            if (restoredText != null) {
+                String name = prefs.getString("FragPurchase", "yes");//"No name defined" is the default value.
+                if(name.equals("yes")){
+                    showTip0();
+                }
+            }
+
+            if(resetMain){
+                mainLabelSelected = null;
+                tvMainLabel.setText("");
+                resetMain = false;
+
+            }
+
+            if(resetSub){
+                subLabelSelected = null;
+                tvSubLabel.setText("");
+                resetSub = false;
             }
         }
     }
@@ -486,9 +570,12 @@ public class FragPurchase extends Fragment {
 
     public void hideSoftKeyboard() {
         etAmount.clearFocus();
-        if (getActivity().getCurrentFocus() != null)
-            inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
-                    .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        try {
+            if (getActivity().getCurrentFocus() != null)
+                inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
+                        .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }catch (Exception e){
+        }
     }
 
     public void addNewMainLabel() {
@@ -547,27 +634,39 @@ public class FragPurchase extends Fragment {
         duckKeyboard = true;
 
 
+
         if (type.equals("sub")) {
             color = MainActivity.db.TransactionDAO().getColorOfMain(mainLabelSelected);
         } else {
-            color = "-524291";
+            color = "-6035713";
         }
 
         dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         View mView = getLayoutInflater().inflate(R.layout.frag_purchase_dialog_create, null);
-
         final Button cancelButton = (Button) mView.findViewById(R.id.frag_purchase_dialog_cancel_button);
         final Button createButton = (Button) mView.findViewById(R.id.frag_purchase_dialog_create_button);
         final EditText et = (EditText) mView.findViewById(R.id.frag_purchase_dialog_create_et);
         final Button colorButton = (Button) mView.findViewById(R.id.frag_purchase_dialog_color_button);
-
+        final ImageView info = (ImageView) mView.findViewById(R.id.infoswitch);
+        final LinearLayout ll = (LinearLayout) mView.findViewById(R.id.ll1);
+        final   Switch switchy = (Switch)mView.findViewById(R.id.frag_purchase_switch_include);
         if (type.equals("sub")) {
+            ll.setVisibility(View.GONE);
             colorButton.setVisibility(View.GONE);
         } else {
             colorButton.setBackgroundColor(Integer.parseInt(color));
 
         }
+
+
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            initNewBuilder();
+
+            }
+        });
 
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -626,9 +725,11 @@ public class FragPurchase extends Fragment {
             @Override
             public void onClick(View v) {
                 if (et.getText().length() > 30) {
-                    Toast.makeText(getActivity(), "The length must be less than 30 characters.", Toast.LENGTH_LONG).show();
+                    FabToast.makeText(getActivity(), "The length must be less than 30 characters.", Toast.LENGTH_LONG,
+                            FabToast.INFORMATION, FabToast.POSITION_DEFAULT).show();
                 } else if (et.getText().length() == 0) {
-                    Toast.makeText(getActivity(), "The length must not be empty.", Toast.LENGTH_LONG).show();
+                    FabToast.makeText(getActivity(), "The length must not be empty.", Toast.LENGTH_LONG,
+                            FabToast.INFORMATION, FabToast.POSITION_DEFAULT).show();
 
                 } else {
                     String label = et.getText().toString().trim();
@@ -636,18 +737,25 @@ public class FragPurchase extends Fragment {
                     Transaction t = new Transaction();
                     t.setColor1(color);
 
+                    Log.i("JOSHcolor", color);
                     if (type.equals("main")) {
+                        if(switchy.isChecked()){
+                            t.setCrossReferenceID("1");
+                        }else{
+                            t.setCrossReferenceID("0");
+                        }
 
                         t.setTypeEntry("info");
                         t.setMainLabel(label);
 
                         if (validate(type, label, mainLabelSelected)) {
-                            secureMainLabelInfo(label);
                             MainActivity.db.TransactionDAO().insertAll(t);
+                            secureMainLabelInfo(label);
                             dialog.dismiss();
                             hideSoftKeyboard();
                         } else {
-                            Toast.makeText(getActivity(), "This label already exists here.", Toast.LENGTH_LONG).show();
+                            FabToast.makeText(getActivity(), "This label already exists here.", Toast.LENGTH_LONG,
+                                    FabToast.WARNING, FabToast.POSITION_DEFAULT).show();
 
                         }
                     }
@@ -658,12 +766,13 @@ public class FragPurchase extends Fragment {
                         t.setSubLabel(label);
 
                         if (validate(type, label, mainLabelSelected)) {
-                            secureSubLabelInfo(label);
                             MainActivity.db.TransactionDAO().insertAll(t);
+                            secureSubLabelInfo(label);
                             dialog.dismiss();
                             hideSoftKeyboard();
                         } else {
-                            Toast.makeText(getActivity(), "This label already exists here.", Toast.LENGTH_LONG).show();
+                            FabToast.makeText(getActivity(), "This label already exists here.", Toast.LENGTH_LONG
+                            ,FabToast.ERROR, FabToast.POSITION_DEFAULT).show();
 
                         }
                     }
@@ -734,14 +843,14 @@ public class FragPurchase extends Fragment {
             case "main":
                 List<Transaction> labels = removeDuplicatesForMain(MainActivity.db.TransactionDAO().fetchAllTransactionsLabels());
 
-                AdapterForFragBottomSheet adapterForFragBottomSheet = new AdapterForFragBottomSheet(getActivity(), labels, type);
+                AdapterForFragBottomSheet adapterForFragBottomSheet = new AdapterForFragBottomSheet(getActivity(), labels, type, "fragpurchase", "noID");
                 rv.setAdapter(adapterForFragBottomSheet);
                 break;
             case "sub":
 
                 List<Transaction> labels2 = MainActivity.db.TransactionDAO().fetchAllTransactionSubLabelsOnlyWithMainLabel(mainLabelSelected);
                 labels2.remove(0);
-                AdapterForFragBottomSheet adapterForFragBottomSheet2 = new AdapterForFragBottomSheet(getActivity(), labels2, type);
+                AdapterForFragBottomSheet adapterForFragBottomSheet2 = new AdapterForFragBottomSheet(getActivity(), labels2, type, "fragpurchase", "noID");
                 rv.setAdapter(null);
                 rv.setAdapter(adapterForFragBottomSheet2);
                 break;
@@ -858,4 +967,183 @@ public class FragPurchase extends Fragment {
         subLabelSelected = null;
         tvSubLabel.setText("");
     }
+
+
+    public void initNewBuilder(){
+        BottomSheet.Builder builder;
+        builder = new BottomSheet.Builder(getActivity());
+
+
+        builder.setWindowDimming(80)
+                .setTitleMultiline(true)
+                .setBackgroundColor(Color.parseColor("#fff8e1"))
+                .setTitleTextColor(Color.parseColor("#263238"));
+
+
+        builder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+            }
+        });
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+            }
+        });
+
+        builder.setCallback(new BottomSheetCallback() {
+            @Override
+            public void onShown() {
+            }
+
+            @Override
+            public void onDismissed() {
+            }
+        });
+
+        builder.setTitle("Only change this setting if this label uses" +
+                " money already accounted for. For example - savings/checking transfers. Transferring money to Savings then back to Checking " +
+                "will result in duplicate deposits/withdrawals of the same money, which will affect percentages in statistics.");
+        builder.show();
+    }
+
+    public void showTip0(){
+        ShowTipsView showtips = new ShowTipsBuilder(getActivity())
+                .setTarget(etAmount)
+                .setTitle("Transaction Amount")
+                .setDescription("This is where you will enter the amount of the transaction.")
+                .setDelay(500)
+                .build();
+
+        showtips.show(getActivity());
+        showtips.setCallback(new ShowTipsViewInterface(){
+            @Override
+            public void gotItClicked() {
+                showTip1();
+            }
+        });
+    }
+
+    public void showTip1(){
+        ShowTipsView showtips = new ShowTipsBuilder(getActivity())
+                .setTarget(stickySwitch)
+                .setTitle("Switch for transaction type")
+                .setDescription("This switch is to select which type of transaction it is.")
+                .setDelay(500)
+                .build();
+
+        showtips.show(getActivity());
+        showtips.setCallback(new ShowTipsViewInterface(){
+            @Override
+            public void gotItClicked() {
+                showTip2();
+            }
+        });
+    }
+
+    public void showTip2(){
+        ShowTipsView showtips = new ShowTipsBuilder(getActivity())
+                .setTarget(addMainLabelIV)
+                .setTitle("Label Creator")
+                .setDescription("This will be how you create your own custom labels to give the transactions.")
+                .setDelay(500)
+                .build();
+
+        showtips.show(getActivity());
+        showtips.setCallback(new ShowTipsViewInterface(){
+            @Override
+            public void gotItClicked() {
+                showTip3();
+            }
+        });
+    }
+    public void showTip3(){
+        ShowTipsView showtips = new ShowTipsBuilder(getActivity())
+                .setTarget(pickMainLabelIV)
+                .setTitle("Label Selector")
+                .setDescription("This will be how you pick the label to give the transaction entry.")
+                .setDelay(500)
+                .build();
+
+        showtips.show(getActivity());
+        showtips.setCallback(new ShowTipsViewInterface(){
+            @Override
+            public void gotItClicked() {
+                showTip4();
+            }
+        });
+    }
+    public void showTip4(){
+        ShowTipsView showtips = new ShowTipsBuilder(getActivity())
+                .setTarget(editMainLabelIV)
+                .setTitle("Label Editor")
+                .setDescription("This will be where you go to manage (edit/create/delete) the labels." )
+                .setDelay(500)
+                .build();
+
+        showtips.show(getActivity());
+        showtips.setCallback(new ShowTipsViewInterface(){
+            @Override
+            public void gotItClicked() {
+                showTip5();
+            }
+        });
+    }
+    public void showTip5(){
+        ShowTipsView showtips = new ShowTipsBuilder(getActivity())
+                .setTarget(saveButton)
+                .setTitle("The Save Button")
+                .setDescription("After you enter an amount/type/label, hit this button to save the transaction into your database. " +
+                        "(the transaction can be edited later if needed)" )
+                .setDelay(500)
+                .build();
+
+        showtips.show(getActivity());
+        showtips.setCallback(new ShowTipsViewInterface(){
+            @Override
+            public void gotItClicked() {
+                SharedPreferences.Editor editor = getActivity().getSharedPreferences("TRANS", MODE_PRIVATE).edit();
+                editor.putString("FragPurchase", "no");
+                editor.apply();
+            }
+        });
+    }
+
+    public void initNewBuilder2(){
+        builder = new BottomSheet.Builder(getActivity());
+
+
+        builder.setWindowDimming(80)
+                .setTitleMultiline(true)
+                .setBackgroundColor(Color.parseColor("#fff8e1"))
+                .setTitleTextColor(Color.parseColor("#263238"));
+
+
+        builder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+            }
+        });
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+            }
+        });
+
+        builder.setCallback(new BottomSheetCallback() {
+            @Override
+            public void onShown() {
+            }
+
+            @Override
+            public void onDismissed() {
+            }
+        });
+
+        builder.setTitle("Check this box if you are making this purchase with cash or with a credit card for example.");
+        builder.show();
+    }
+
+
+
 }

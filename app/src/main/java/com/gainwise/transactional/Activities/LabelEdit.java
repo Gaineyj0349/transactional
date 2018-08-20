@@ -2,6 +2,7 @@ package com.gainwise.transactional.Activities;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -11,7 +12,10 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.asksira.dropdownview.DropDownView;
@@ -22,8 +26,13 @@ import com.skydoves.colorpickerpreference.ColorEnvelope;
 import com.skydoves.colorpickerpreference.ColorListener;
 import com.skydoves.colorpickerpreference.ColorPickerView;
 
+import org.michaelbel.bottomsheet.BottomSheet;
+import org.michaelbel.bottomsheet.BottomSheetCallback;
+
 import java.util.Collections;
 import java.util.List;
+
+import spencerstudios.com.fab_toast.FabToast;
 
 public class LabelEdit extends AppCompatActivity {
 
@@ -38,6 +47,7 @@ public class LabelEdit extends AppCompatActivity {
     String colorIn;
     String oldLabel;
     int currentSpot;
+    boolean statbool = false;
 
 
     @Override
@@ -45,11 +55,17 @@ public class LabelEdit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_label_edit);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(MainActivity.db == null){
+            finish();
+        }else{
+            FragPurchase.cameFromEditMode = true;
+            dropDownView = findViewById(R.id.dropdownview);
+            initList();
+        }
+        Log.i("JOSHspawn", "onCreate called here");
 
-        FragPurchase.cameFromEditMode = true;
-        dropDownView = findViewById(R.id.dropdownview);
 
-        initList();
+
 
 
         Button editButton = findViewById(R.id.label_edit_edit_button);
@@ -60,7 +76,8 @@ public class LabelEdit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(currentInDropDown == null){
-                    Toast.makeText(LabelEdit.this, "Please Make a Selection First!", Toast.LENGTH_SHORT).show();
+                    FabToast.makeText(LabelEdit.this, "Please Make a Selection First!", Toast.LENGTH_SHORT,
+                            FabToast.INFORMATION, FabToast.POSITION_DEFAULT).show();
                 }else{
                 showDialogForEdit(type, currentInDropDown);
                 }
@@ -71,7 +88,8 @@ public class LabelEdit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(currentInDropDown == null){
-                    Toast.makeText(LabelEdit.this, "Please Make a Selection First!", Toast.LENGTH_SHORT).show();
+                    FabToast.makeText(LabelEdit.this,
+                            "Please Make a Selection First!", Toast.LENGTH_SHORT, FabToast.INFORMATION, FabToast.POSITION_DEFAULT).show();
                 }else{
                     showDialogforDelete(type);
                 }
@@ -104,9 +122,6 @@ public class LabelEdit extends AppCompatActivity {
             //this next part removes the null from the list that comes with this fetch, then organizes by sorting alphabetically
 
             labelList.remove(0);
-
-
-
         }
             else
         {
@@ -128,9 +143,16 @@ public class LabelEdit extends AppCompatActivity {
         dropDownView.setOnSelectionListener(new DropDownView.OnSelectionListener() {
             @Override
             public void onItemSelected(DropDownView view, int position) {
+
                 currentInDropDown = labelList.get(position);
+                Log.i("JOSHtestdrop", currentInDropDown);
                 currentSpot = position;
                 Log.i("JOSHspot ", ""+position);
+
+                if(type.equals("main")){
+                    Log.i("JOSHtest", "yo"+mainLabelSelected);
+                    mainLabelSelected = labelList.get(currentSpot);
+                }
             }
         });
 if(labelList.size() != 0){
@@ -142,12 +164,23 @@ if(labelList.size() != 0){
             dropDownView.setSelectingPosition(0);
             currentSpot = 0;
         }
+
 }
 
 if(getIntent().hasExtra("main1")){
     int pos = labelList.indexOf(getIntent().getStringExtra("main1"));
-    dropDownView.setSelectingPosition(pos);
+if(labelList.size() == 0){
+    dropDownView.setPlaceholderText("No labels yet!");
+}else{
+    if(pos<0){
+        dropDownView.setSelectingPosition(0);
+    }else{
+        dropDownView.setSelectingPosition(pos);
+    }
 }
+
+}
+
     }
 
     private void showDialogForCreateNew(final String type) {
@@ -165,9 +198,20 @@ if(getIntent().hasExtra("main1")){
         final Button createButton = (Button) mView.findViewById(R.id.frag_purchase_dialog_create_button);
         final EditText et = (EditText) mView.findViewById(R.id.frag_purchase_dialog_create_et);
         final Button colorButton = (Button) mView.findViewById(R.id.frag_purchase_dialog_color_button);
+        final ImageView info = (ImageView) mView.findViewById(R.id.infoswitch);
+        final LinearLayout ll = (LinearLayout) mView.findViewById(R.id.ll1);
+        final Switch switchy = (Switch)mView.findViewById(R.id.frag_purchase_switch_include);
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initNewBuilder();
+
+            }
+        });
 
         if (type.equals("sub")) {
             colorButton.setVisibility(View.GONE);
+            ll.setVisibility(View.GONE);
         } else {
             colorButton.setBackgroundColor(Integer.parseInt(color));
 
@@ -230,9 +274,11 @@ if(getIntent().hasExtra("main1")){
             @Override
             public void onClick(View v) {
                 if (et.getText().length() > 30) {
-                    Toast.makeText(LabelEdit.this, "The length must be less than 30 characters.", Toast.LENGTH_LONG).show();
+                    FabToast.makeText(LabelEdit.this, "The length must be less than 30 characters.",
+                            Toast.LENGTH_LONG, FabToast.INFORMATION, FabToast.POSITION_DEFAULT).show();
                 } else if (et.getText().length() == 0) {
-                    Toast.makeText(LabelEdit.this, "The length must not be empty.", Toast.LENGTH_LONG).show();
+                    FabToast.makeText(LabelEdit.this, "The length must not be empty.", Toast.LENGTH_LONG
+                            , FabToast.INFORMATION, FabToast.POSITION_DEFAULT).show();
 
                 } else {
                     String label = et.getText().toString().trim();
@@ -241,7 +287,11 @@ if(getIntent().hasExtra("main1")){
                     t.setColor1(color);
 
                     if (type.equals("main")) {
-
+                        if(switchy.isChecked()){
+                            t.setCrossReferenceID("1");
+                        }else{
+                            t.setCrossReferenceID("0");
+                        }
                         t.setTypeEntry("info");
                         t.setMainLabel(label);
 
@@ -250,7 +300,8 @@ if(getIntent().hasExtra("main1")){
                             initList();
                             dialogz.dismiss();
                         } else {
-                            Toast.makeText(LabelEdit.this, "This label already exists here.", Toast.LENGTH_LONG).show();
+                            FabToast.makeText(LabelEdit.this, "This label already exists here.", Toast.LENGTH_LONG
+                            ,FabToast.ERROR, FabToast.POSITION_DEFAULT).show();
 
                         }
                     }
@@ -265,19 +316,11 @@ if(getIntent().hasExtra("main1")){
                             initList();
                             dialogz.dismiss();
                         } else {
-                            Toast.makeText(LabelEdit.this, "This label already exists here.", Toast.LENGTH_LONG).show();
+                            FabToast.makeText(LabelEdit.this, "This label already exists here.", Toast.LENGTH_LONG
+                                    ,FabToast.ERROR, FabToast.POSITION_DEFAULT).show();
 
                         }
                     }
-
-
-
-
-
-
-
-
-
 
                 }
             }
@@ -312,6 +355,7 @@ if(getIntent().hasExtra("main1")){
 
     private void showDialogForEdit(final String type, String labelIn) {
        oldLabel = labelIn;
+        statbool = false;
         if (type.equals("sub")) {
             colorIn = MainActivity.db.TransactionDAO().getColorOfMain(mainLabelSelected);
             color = MainActivity.db.TransactionDAO().getColorOfMain(mainLabelSelected);
@@ -330,13 +374,37 @@ if(getIntent().hasExtra("main1")){
         final EditText et = (EditText) mView.findViewById(R.id.frag_purchase_dialog_create_et);
         final Button colorButton = (Button) mView.findViewById(R.id.frag_purchase_dialog_color_button);
         createButton.setText("SAVE");
+        final ImageView info = (ImageView) mView.findViewById(R.id.infoswitch);
+        final LinearLayout ll = (LinearLayout) mView.findViewById(R.id.ll1);
+        final   Switch switchy = (Switch)mView.findViewById(R.id.frag_purchase_switch_include);
+        switchy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 statbool = true;
+            }
+        });
+
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initNewBuilder();
+
+            }
+        });
         et.setText(currentInDropDown);
 
         if (type.equals("sub")) {
             colorButton.setVisibility(View.GONE);
+            ll.setVisibility(View.GONE);
         } else {
             colorButton.setBackgroundColor(Integer.parseInt(color));
-
+            String stat = MainActivity.db.TransactionDAO().getIncludeStatStatus(mainLabelSelected);
+            Log.i("JOSHtest", stat + " " + mainLabelSelected);
+            if(stat.equals("1")){
+                switchy.setChecked(true);
+            }else{
+                switchy.setChecked(false);
+            }
         }
 
 
@@ -398,12 +466,15 @@ if(getIntent().hasExtra("main1")){
             public void onClick(View v) {
 
                 if (et.getText().length() > 30) {
-                    Toast.makeText(LabelEdit.this, "The length must be less than 30 characters.", Toast.LENGTH_LONG).show();
+                    FabToast.makeText(LabelEdit.this, "The length must be less than 30 characters.", Toast.LENGTH_LONG,
+                    FabToast.WARNING, FabToast.POSITION_DEFAULT).show();
                 } else if (et.getText().length() == 0) {
-                    Toast.makeText(LabelEdit.this, "The length must not be empty.", Toast.LENGTH_LONG).show();
+                    FabToast.makeText(LabelEdit.this, "The length must not be empty.", Toast.LENGTH_LONG,
+                            FabToast.WARNING, FabToast.POSITION_DEFAULT).show();
 
-                } else if(et.getText().toString().trim().equals(currentInDropDown) && color.equals(colorIn)){
-                    Toast.makeText(LabelEdit.this, "No Change Detected.", Toast.LENGTH_LONG).show();
+                } else if(et.getText().toString().trim().equals(currentInDropDown) && color.equals(colorIn)&& !statbool){
+                    FabToast.makeText(LabelEdit.this, "No Change Detected.", Toast.LENGTH_LONG,
+                            FabToast.ERROR, FabToast.POSITION_DEFAULT).show();
                     dialogz.dismiss();
                 }
                 else if(et.getText().toString().trim().equals(currentInDropDown) && !color.equals(colorIn)){
@@ -424,7 +495,7 @@ if(getIntent().hasExtra("main1")){
 
 
 
-                        if (validate(type, newLabel, mainLabelSelected)) {
+                        if (validate(type, newLabel, mainLabelSelected) || statbool) {
 
                             AlertDialog.Builder builder;
 
@@ -439,7 +510,13 @@ if(getIntent().hasExtra("main1")){
                                     .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            updateAllLabelsWith(type,oldLabel, newLabel, color);
+                                            String includeStat = "";
+                                            if(switchy.isChecked()){
+                                                includeStat = "1";
+                                            }else if (!switchy.isChecked()){
+                                                includeStat = "0";
+                                            }
+                                            updateAllLabelsWith(type,oldLabel, newLabel, color, includeStat);
                                             initList();
                                             dialogz.dismiss();
                                         }
@@ -457,7 +534,8 @@ if(getIntent().hasExtra("main1")){
 
 
                         } else {
-                            Toast.makeText(LabelEdit.this, "This label already exists here.", Toast.LENGTH_LONG).show();
+                            FabToast.makeText(LabelEdit.this, "This label already exists here.", Toast.LENGTH_LONG,
+                            FabToast.WARNING, FabToast.POSITION_DEFAULT).show();
 
                         }
                     }
@@ -480,7 +558,7 @@ if(getIntent().hasExtra("main1")){
                                     .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            updateAllLabelsWith(type,oldLabel, newLabel, color);
+                                            updateAllLabelsWith(type,oldLabel, newLabel, color,"");
                                             initList();
                                             dialogz.dismiss();
                                         }
@@ -494,7 +572,8 @@ if(getIntent().hasExtra("main1")){
                                     .setIcon(android.R.drawable.ic_dialog_info)
                                     .show();
                         } else {
-                            Toast.makeText(LabelEdit.this, "This label already exists here.", Toast.LENGTH_LONG).show();
+                            FabToast.makeText(LabelEdit.this, "This label already exists here.", Toast.LENGTH_LONG,
+                                    FabToast.WARNING, FabToast.POSITION_DEFAULT).show();
 
                         }
                     }
@@ -517,11 +596,14 @@ if(getIntent().hasExtra("main1")){
 
     }
 
-    private void updateAllLabelsWith(String type, String oldLabel, String newLabel, String color) {
+    private void updateAllLabelsWith(String type, String oldLabel, String newLabel, String color, String stat) {
 
         if(type.equals("main")){
             MainActivity.db.TransactionDAO().updateAllColorsWithMain(oldLabel,color);
+            MainActivity.db.TransactionDAO().updateAllStatIncludeswithMain(oldLabel,stat);
+            Log.i("JOSHtest", oldLabel + stat);
             MainActivity.db.TransactionDAO().updateAllMainLabels(oldLabel,newLabel);
+            MainActivity.db.TransactionDAO().updateAllStatIncludeswithMain(newLabel,stat);
 
         }else if (type.equals("sub")){
             MainActivity.db.TransactionDAO().updateAllSubLabels(oldLabel,newLabel);
@@ -549,7 +631,8 @@ if(getIntent().hasExtra("main1")){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         deleteAllWithLabel(typeIn, currentInDropDown);
-                        initList();
+//                        initList();
+
 
                     }
                 })
@@ -571,6 +654,9 @@ private void deleteAllWithLabel(String typeIn, String label){
         MainActivity.db.TransactionDAO().deleteTransactionWithSubLabel(label);
 
     }
+  //  recreate();
+    FragPurchase.resetSub = true;
+    FragPurchase.resetMain = true;
     initList();
 
 }
@@ -580,5 +666,55 @@ private void deleteAllWithLabel(String typeIn, String label){
         super.onDestroy();
         Log.i("JOSHlabel", "ondestroy");
 
+    }
+
+    public void initNewBuilder(){
+        BottomSheet.Builder builder;
+        builder = new BottomSheet.Builder(LabelEdit.this);
+
+
+        builder.setWindowDimming(80)
+                .setTitleMultiline(true)
+                .setBackgroundColor(Color.parseColor("#fff8e1"))
+                .setTitleTextColor(Color.parseColor("#263238"));
+
+
+        builder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+            }
+        });
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+            }
+        });
+
+        builder.setCallback(new BottomSheetCallback() {
+            @Override
+            public void onShown() {
+            }
+
+            @Override
+            public void onDismissed() {
+            }
+        });
+
+        builder.setTitle("Only change this setting if this label uses" +
+                " money already accounted for. For example - savings/checking transfers. Transferring money to Savings then back to Checking " +
+                "will result in duplicate deposits/withdrawals of the same money, which will affect percentages in statistics.");
+        builder.show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i("JOSHspawn", "onStart" );
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("JOSHspawn", "onResume" );
     }
 }

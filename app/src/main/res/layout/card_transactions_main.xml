@@ -40,6 +40,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="6dp">
+        <TextView
+
+            android:id="@+id/card_id"
+            android:textSize="14sp"
+            android:text="FOOD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/card_date"/>
 
     <TextView
 

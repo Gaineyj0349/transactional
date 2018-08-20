@@ -12,7 +12,7 @@
         android:id="@+id/frag_purchase_dialog_create_tv"
         android:textSize="25sp"
         android:layout_width="match_parent"
-       android:textAlignment="center"
+        android:textAlignment="center"
         android:layout_height="wrap_content"
         android:text="@string/create"/>
 
@@ -47,8 +47,37 @@
         android:layout_below="@id/etbigcuz" />
 
     <LinearLayout
+        android:paddingTop="@dimen/fab_margin"
+        android:paddingBottom="@dimen/fab_margin"
+        android:id="@+id/ll1"
         android:gravity="center_horizontal"
         android:layout_below="@+id/frag_purchase_dialog_color_button"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/infoswitch"
+            android:paddingRight="@dimen/fab_margin"
+            android:src="@drawable/ic_info_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Include in Statistics?" />
+        <Switch
+            android:checked="true"
+            android:id="@+id/frag_purchase_switch_include"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/ll1"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

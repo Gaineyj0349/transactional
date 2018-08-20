@@ -4,6 +4,144 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.TransactionView">
+    tools:context=".Activities.TransactionView"
+    android:id="@+id/viewTrans_mainbg"
+    android:padding="6dp">
+
+<RelativeLayout
+    android:padding="8dp"
+    android:id="@+id/viewTrans_RL1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+    <TextView
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:id="@+id/viewTrans_tvtype"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="type"/>
+    <ScrollView
+        android:id="@+id/view_llview"
+        android:layout_above="@id/fab"
+        android:layout_below="@id/viewTrans_tvtype"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:textSize="22sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/date"/>
+        <TextView
+            android:textSize="18sp"
+            android:id="@+id/viewTrans_tvdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="amount here"/>
+
+        <TextView
+            android:textSize="22sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/amount"/>
+        <TextView
+            android:textSize="18sp"
+            android:id="@+id/viewTrans_tvamount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="amount here"/>
+
+        <TextView
+            android:id="@+id/resultingTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/balance"
+            android:textSize="22sp" />
+        <TextView
+            android:textSize="18sp"
+            android:id="@+id/viewTrans_tvbalance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="resulting balance here"/>
+
+    <TextView
+        android:textSize="22sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/fragpurchasemain"/>
+        <TextView
+            android:textSize="18sp"
+            android:id="@+id/viewTrans_tvmain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="main here"/>
+        <TextView
+            android:textSize="22sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragpurchasesub"/>
+        <TextView
+            android:textSize="18sp"
+            android:id="@+id/viewTrans_tvsub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="sub here"/>
+        <TextView
+            android:textSize="22sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragpurchaseadditionalinfo"/>
+        <TextView
+            android:textSize="18sp"
+            android:id="@+id/viewTrans_tvadditionalInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="additional info here"/>
+
+
+
+
+    </LinearLayout>
+
+
+    </ScrollView>
+
+<!--
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_mode_edit_black_24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />  -->
+    <com.dekoservidoni.omfm.OneMoreFabMenu
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        app:close_on_click="true"
+        app:color_main_button="@color/colorPrimaryDark"
+        app:color_secondary_buttons="@color/colorPrimary"
+        app:content_options="@menu/fab_menu_view"
+        app:enable_main_as_action="true"
+        app:label_text_color="@color/colorPrimary"
+        app:main_action_drawable="@drawable/ic_mode_edit_black_24dp"
+        app:rotate_main_button="false"
+        app:size_main_button="@integer/omfm_fab_size_normal"
+        app:size_secondary_buttons="@integer/omfm_fab_size_mini" />
+
+</RelativeLayout>
+
 
 </android.support.constraint.ConstraintLayout>

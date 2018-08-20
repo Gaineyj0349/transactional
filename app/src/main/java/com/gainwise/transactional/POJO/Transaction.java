@@ -15,6 +15,17 @@ public class Transaction {
     @ColumnInfo (name = "_amount")
     private String amount;
 
+    public long getTimeInMillis() {
+        return timeInMillis;
+    }
+
+    public void setTimeInMillis(long timeInMillis) {
+        this.timeInMillis = timeInMillis;
+    }
+
+    @ColumnInfo (name = "_timeInMillis")
+    private long timeInMillis;
+
     @ColumnInfo (name = "_main_label")
     private String mainLabel;
 
@@ -55,6 +66,7 @@ public class Transaction {
     @ColumnInfo (name = "_from_cash")
     private String fromCash;
 
+    //using this column name/info for the includeForStatistics variable to be added later
     @ColumnInfo (name = "_cross_reference_id")
     private String crossReferenceID;
 
