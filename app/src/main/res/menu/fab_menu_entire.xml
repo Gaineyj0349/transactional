@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- First button is the initial Fab of the menu -->
+    <!-- Title here can be empty if you don't to add any action in the main button -->
+    <item
+        android:id="@+id/main_option"
+        android:icon="@drawable/ic_filter_list_black_24dp"
+        android:title=" Collapse "/>
+
+    <!-- Options buttons of the Fab menu -->
+    <item
+        android:id="@+id/option1"
+        android:icon="@drawable/ic_view_list_black_24dp"
+        android:title=" Main Label " />
+
+    <item
+        android:id="@+id/option2"
+        android:icon="@drawable/ic_view_list_black_24dp"
+        android:title=" Sub Label " />
+    <item
+        android:id="@+id/option3"
+        android:icon="@drawable/ic_autorenew_black_24dp"
+        android:title=" Restart " />
+
+
+
+</menu>

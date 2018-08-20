@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.EntireHistoryWFilter"
+    android:paddingTop="4dp"
+    android:paddingRight="8dp"
+    android:paddingLeft="8dp">
+
+
+    <RelativeLayout
+
+        android:id="@+id/viewTrans_RL1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+
+        <!--
+        <Spinner
+            android:layout_alignParentTop="true"
+            android:id="@+id/entire_spinner_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/fab_margin" />
+-->
+
+        <android.support.v7.widget.RecyclerView
+            android:paddingTop="@dimen/rvSeperate"
+            android:id="@+id/entire_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <com.asksira.dropdownview.DropDownView
+            android:paddingTop="@dimen/subSeperate"
+            app:expand_include_selected_item="true"
+            android:layout_alignParentTop="true"
+            android:id="@+id/entire_dropdownviewsub"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:placeholder_text="All Sub Labels"
+            app:filter_bar_background_color="@color/colorPrimaryDark"
+            app:filter_height="@dimen/ddvHeight"
+            app:filter_text_color="@android:color/white"
+            app:arrow_drawable="@drawable/expand_arrow"
+            app:arrow_width="24dp"
+            app:dropDownItem_text_color_selected="@color/colorAccent"
+            app:divider_color="@color/colorPrimary"
+            app:dropDownItem_text_size_selected="18sp" />
+        <com.asksira.dropdownview.DropDownView
+            android:layout_alignParentTop="true"
+            android:id="@+id/entire_dropdownviewmain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:placeholder_text="All Main Labels"
+            app:filter_bar_background_color="@color/colorPrimaryDark"
+            app:filter_height="@dimen/ddvHeight"
+            app:filter_text_color="@android:color/white"
+            app:arrow_drawable="@drawable/expand_arrow"
+            app:arrow_width="24dp"
+            app:expand_include_selected_item="true"
+            app:dropDownItem_text_color_selected="@color/colorAccent"
+            app:divider_color="@color/colorPrimary"
+            app:dropDownItem_text_size_selected="18sp" />
+
+
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

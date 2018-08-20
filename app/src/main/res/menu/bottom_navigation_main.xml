@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:enabled="true"
+        android:id="@+id/barchartpurchase"
+        android:title="EXPENSES"
+        android:icon="@drawable/ic_pie_chart_black_24dp"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:enabled="true"
+        android:id="@+id/barchartdeposit"
+        android:title="DEPOSITS"
+        android:icon="@drawable/ic_pie_chart_black_24dp"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/datatable"
+        android:title="BUDGET TABLE"
+        android:icon="@drawable/ic_grid_on_black_24dp"
+        android:enabled="true"
+        app:showAsAction="ifRoom"/>
+
+</menu>

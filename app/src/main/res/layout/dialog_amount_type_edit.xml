@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="6dp">
+
+    <TextView
+        android:layout_alignParentTop="true"
+        android:textAlignment="center"
+        android:id="@+id/tv1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:paddingBottom="6dp"
+        android:text="@string/confirmamount"/>
+
+    <io.ghyeok.stickyswitch.widget.StickySwitch
+        android:layout_below="@id/tv1"
+        android:layout_centerInParent="true"
+        android:id="@+id/dialog_sticky"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:ss_animationDuration="900"
+        app:ss_iconSize="15dp"
+        app:ss_leftIcon="@drawable/ic_remove_black_24dp"
+        app:ss_leftText="Withdrawal"
+        app:ss_rightIcon="@drawable/ic_add_black_24dp"
+        app:ss_rightText="Deposit"
+        app:ss_selectedTextSize="10sp"
+        app:ss_sliderBackgroundColor="@color/colorPrimaryDark"
+        app:ss_switchColor="@color/colorAccent"
+        app:ss_textColor="@color/textColorPrimary"
+        app:ss_textSize="8sp"
+        app:ss_animationType="line"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_below="@id/dialog_sticky"
+        android:id="@+id/textInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+     android:padding="6dp"
+        android:gravity="center">
+
+        <android.support.design.widget.TextInputEditText
+            android:inputType="numberDecimal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialog_amount_type_et"
+            android:hint="Amount"
+            android:textAlignment="center"/>
+
+
+    </android.support.design.widget.TextInputLayout>
+    <Button
+        android:layout_below="@+id/textInputLayout"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:text="Confirm"
+        android:id="@+id/dialog_amount_type_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <Button
+        android:layout_below="@+id/dialog_amount_type_confirm"
+        android:id="@+id/dialog_amount_type_cancel"
+        style="@android:style/Widget.Material.Light.Button.Inset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel" />
+
+</RelativeLayout>
